@@ -33,8 +33,9 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
-  
+
+
+exports.updatePassword = catchAsyncErrors(async (req, res, next) => { 
 
   const user = await User.findById(req.user.id).select("+password");
 
@@ -52,4 +53,43 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
 
 
+exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+  const newuserData = {
+    userName : req.body.userName,
+    fullName: req.body.fullName,
+    email: req.body.email,
+    phoneNumber : req.body.phoneNumber,
+    address: req.body.address,
+    
+  }
+  const user = await User.findByIdAndUpdate(req.user.id , newuserData ,  {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false
+  })
 
+  res.status(200).json({
+    success: true
+  })
+
+})
+
+
+
+exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findOne({'userName':req.params.userName});
+
+  if (!user) {
+    return next(new ErrorHandler("Invalid User Name", 401));
+  }
+
+
+  await user.remove()
+
+res.status(200).json({
+  success : "true",
+  })
+
+
+
+})
