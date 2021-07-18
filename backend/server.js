@@ -5,7 +5,7 @@ dotenv.config({path:'../DWELLATEST/backend/config/config.env'})
 //Connecting connectDatabase
 
 const connnectDatabase = require('./config/database')
-
+connnectDatabase();
 
 
 
