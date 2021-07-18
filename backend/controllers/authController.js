@@ -12,6 +12,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+
+  
   const { email, password } = req.body;
   if (!email || !password) {
     return next(new ErrorHandler("Please enter email & password", 404));
@@ -33,10 +35,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-
-
-exports.updatePassword = catchAsyncErrors(async (req, res, next) => { 
-
+exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
 
   //Check previos user password
@@ -51,44 +50,64 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-
-
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newuserData = {
-    userName : req.body.userName,
+    userName: req.body.userName,
     fullName: req.body.fullName,
     email: req.body.email,
-    phoneNumber : req.body.phoneNumber,
+    phoneNumber: req.body.phoneNumber,
     address: req.body.address,
-    
-  }
-  const user = await User.findByIdAndUpdate(req.user.id , newuserData ,  {
+  };
+  const user = await User.findByIdAndUpdate(req.user.id, newuserData, {
     new: true,
     runValidators: true,
-    useFindAndModify: false
-  })
+    useFindAndModify: false,
+  });
 
   res.status(200).json({
-    success: true
-  })
-
-})
-
-
+    success: true,
+  });
+});
 
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
-  const user = await User.findOne({'userName':req.params.userName});
+  const user = await User.findOne({ userName: req.params.userName });
 
   if (!user) {
     return next(new ErrorHandler("Invalid User Name", 401));
   }
 
+  await user.remove();
 
-  await user.remove()
+  res.status(200).json({
+    success: "true",
+  });
+});
 
+
+
+
+exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
+const Users = await User.find();
 res.status(200).json({
-  success : "true",
+  Users
+})
+})
+
+
+
+exports.getSingleUser = catchAsyncErrors(async(req, res, next) => {
+  const {userName} = req.body;
+  const user = await User.findOne({userName: userName});
+  if (!user) {
+  new ErrorHandler("test",402);
+    return next();
+  }
+
+
+  res.status(200).json({
+    user
   })
+
 
 
 
