@@ -14,11 +14,13 @@ const errorMiddleWare = require('./middlewares/error');
 
 //Importing routes
 const user =  require('./route/userRoutes.js')
+const listing =  require('./route/listingRoutes.js')
 
 
 
 
 
 app.use('/',user)
+app.use('/listing',listing)
 app.use(errorMiddleWare);
 module.exports  = app;

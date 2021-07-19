@@ -6,6 +6,8 @@ module.exports = (error,req,res,next) =>
     
 if(error.name === 'ValidationError'){
     error.statusCode = 400
+    error.message = "Invalid or missing Inputs"
+
 }
 
 error.statusCode = error.statusCode || 500;

@@ -12,8 +12,6 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
-
-  
   const { email, password } = req.body;
   if (!email || !password) {
     return next(new ErrorHandler("Please enter email & password", 404));
@@ -83,32 +81,22 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
-
-
 exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
-const Users = await User.find();
-res.status(200).json({
-  Users
-})
-})
+  const Users = await User.find();
+  res.status(200).json({
+    Users,
+  });
+});
 
-
-
-exports.getSingleUser = catchAsyncErrors(async(req, res, next) => {
-  const {userName} = req.body;
-  const user = await User.findOne({userName: userName});
+exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
+  const { userName } = req.body;
+  const user = await User.findOne({ userName: userName });
   if (!user) {
-  new ErrorHandler("test",402);
+    new ErrorHandler("test", 402);
     return next();
   }
 
-
   res.status(200).json({
-    user
-  })
-
-
-
-
-})
+    user,
+  });
+});
