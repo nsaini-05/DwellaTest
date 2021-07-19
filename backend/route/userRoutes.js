@@ -8,10 +8,10 @@ router.route('/signup').post(registerUser);
 
 router.route('/login').post(loginUser);
 
-router.route('/update/password').post(isAuthenticatedUser,updatePassword);
+router.route('/update/password').put(isAuthenticatedUser,updatePassword);
 
 
-router.route('/update/profile').post(isAuthenticatedUser,updateProfile);
+router.route('/update/profile').put(isAuthenticatedUser,updateProfile);
 
 
 router.route('/delete/:userName').delete(isAuthenticatedUser,deleteUser);

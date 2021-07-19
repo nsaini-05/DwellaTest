@@ -1,12 +1,4 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
-const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
-
-
-
-
-
-
 
 const listingSchema = new mongoose.Schema({
   title: {
@@ -61,13 +53,7 @@ const listingSchema = new mongoose.Schema({
 
 
 
-listingSchema.pre("save", async function (next) {
-   
-  if (!this.isModified("city" || "address")){
-      next();
-    } 
-    
-  });
+
 
 
   const Listing = mongoose.model("Listing", listingSchema);

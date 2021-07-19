@@ -15,14 +15,13 @@ exports.registerListing = catchAsyncErrors(async (req, res, next) => {
     const { data } = resp.data;
     var { latitude, longitude } = data[0];
   } catch (error) {
-    return next(new ErrorHandler("Invalid Inputs"));
+    return next(
+      new ErrorHandler("Unable to find Cordinates. Try with different address")
+    );
   }
-
   req.body.latitude = latitude;
   req.body.longitude = longitude;
-
   const listing = await Listing.create(req.body);
-
   res.status(201).json({
     success: true,
     listing,
@@ -41,23 +40,61 @@ exports.deleteListing = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
-
-exports.getAllListings = catchAsyncErrors(async (req, res, next)=>{
- const listings = await Listing.find();
- res.status(200).json({
-    listings
+exports.getAllListings = catchAsyncErrors(async (req, res, next) => {
+  const listings = await Listing.find();
+  res.status(200).json({
+    listings,
   });
-})
+});
 
-exports.getCityListings = catchAsyncErrors(async (req, res, next)=>{
-    const listings = await Listing.find({'city' : req.params.city})
-    
-    if (!listings) {
-        return next(new ErrorHandler(`No Listings in ${req.params.city}`, 404));
-      }
+exports.getCityListings = catchAsyncErrors(async (req, res, next) => {
+  const listings = await Listing.find({ city: req.params.city });
 
-      res.status(200).json({
-        listings
-      });
-})
+  if (!listings) {
+    return next(new ErrorHandler(`No Listings in ${req.params.city}`, 404));
+  }
+  res.status(200).json({
+    listings,
+  });
+});
+
+exports.updateListing = catchAsyncErrors(async (req, res, next) => {
+  const { address, city } = req.body;
+  const FULL_API_URL = `${API_URL}?access_key=${API_KEY}&query==${address}`;
+
+  try {
+    const resp = await axios.get(FULL_API_URL);
+    const { data } = resp.data;
+    var { latitude, longitude } = data[0];
+  } catch (error) {
+    return next(
+      new ErrorHandler("Unable to find Cordinates. Try with different address")
+    );
+  }
+  req.body.latitude = latitude;
+  req.body.longitude = longitude;
+  const updatedListingData = {
+    title: req.body.title,
+    address: req.body.address,
+    price: req.body.price,
+    city: req.body.city,
+    owner: req.body.owner,
+    type: req.body.type,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+  };
+
+  const listing = await Listing.findByIdAndUpdate(
+    req.params.id,
+    updatedListingData,
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
+
+  res.status(200).json({
+    success: true,
+  });
+});
