@@ -43,10 +43,21 @@ exports.deleteListing = catchAsyncErrors(async (req, res, next) => {
 
 
 
-exports.allListing = catchAsyncErrors(async (req, res, next)=>{
+exports.getAllListings = catchAsyncErrors(async (req, res, next)=>{
  const listings = await Listing.find();
  res.status(200).json({
     listings
   });
+})
 
+exports.getCityListings = catchAsyncErrors(async (req, res, next)=>{
+    const listings = await Listing.find({'city' : req.params.city})
+    
+    if (!listings) {
+        return next(new ErrorHandler(`No Listings in ${req.params.city}`, 404));
+      }
+
+      res.status(200).json({
+        listings
+      });
 })
