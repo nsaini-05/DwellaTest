@@ -3,6 +3,10 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 
+
+
+
+
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.create(req.body);
   res.status(201).json({
@@ -97,6 +101,6 @@ exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   res.status(200).json({
-    user,
+    user
   });
 });

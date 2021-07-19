@@ -22,7 +22,8 @@ exports.registerListing = catchAsyncErrors(async (req, res, next) => {
   }
   req.body.latitude = latitude;
   req.body.longitude = longitude;
-  const listing = await Listing.create(req.body);
+  const listing = await Listing.create(req.body)
+  
   res.status(201).json({
     success: true,
     listing,
@@ -43,10 +44,15 @@ exports.deleteListing = catchAsyncErrors(async (req, res, next) => {
 
 exports.getAllListings = catchAsyncErrors(async (req, res, next) => {
   const listings = await Listing.find();
+  
   res.status(200).json({
-    listings,
+    sucees : "dasf"
   });
 });
+
+
+
+
 
 exports.getCityListings = catchAsyncErrors(async (req, res, next) => {
   const listings = await Listing.find({ city: req.params.city });
@@ -58,6 +64,8 @@ exports.getCityListings = catchAsyncErrors(async (req, res, next) => {
     listings,
   });
 });
+
+
 
 exports.updateListing = catchAsyncErrors(async (req, res, next) => {
   const { address, city } = req.body;
@@ -103,12 +111,45 @@ exports.updateListing = catchAsyncErrors(async (req, res, next) => {
 
 exports.filteredSearch = catchAsyncErrors(async (req, res, next) => {
   const apiFeatures = new APIFeatures(Listing.find(), req.query).search().filter()
-  let listings = await apiFeatures.query
-
-  
+  let listings = await apiFeatures.query  
   res.status(200).json({
     success: true,
     listings
   })
+})
+
+
+
+exports.delisting = catchAsyncErrors(async (req, res, next) =>{
+
+  const listing = await Listing.findById(req.params.id)
+
+  if(!listing){
+    return next (new ErrorHandler("Invalid Listing Id"))
+  }
+
+  listing.inMarket = !listing.inMarket;
+  listing.save();
+
+  res.status(200).json({
+    success : true,
+    listing
+  })
 
 })
+
+
+
+
+
+exports.getMarketListing = catchAsyncErrors(async (req, res, next) =>{
+  const listings = await Listing.find({inMarket : true})
+  res.status(200).json({
+    listings,
+  });
+})
+
+
+
+
+

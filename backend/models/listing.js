@@ -4,18 +4,18 @@ const listingSchema = new mongoose.Schema({
   title: {
     type: "string",
     required: [true, "Please enter listing title"],
-    lowercase: true
+    lowercase: true,
   },
   address: {
-      type: String,
-      required: true,
-      lowercase: true
-    },
-  
+    type: String,
+    required: true,
+    lowercase: true,
+  },
+
   city: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
   },
   price: {
     type: Number,
@@ -26,7 +26,7 @@ const listingSchema = new mongoose.Schema({
   owner: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
   },
 
   type: {
@@ -37,29 +37,19 @@ const listingSchema = new mongoose.Schema({
       message: "Please select the correct category",
     },
   },
+
+  latitude: {
+    type: String,
+  },
+  longitude: {
+    type: String,
+  },
   
-    'latitude':{
-      type : String
-    },
-    'longitude':{
-      type : String
-    }
-  
+  inMarket :{
+    type : Boolean,
+    default : false,
+  },
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  const Listing = mongoose.model("Listing", listingSchema);
-  module.exports = Listing;
-  
+const Listing = mongoose.model("Listing", listingSchema);
+module.exports = Listing;
