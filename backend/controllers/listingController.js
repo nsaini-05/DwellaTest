@@ -1,6 +1,7 @@
 const Listing = require("../models/listing");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
+const APIFeatures = require('../utils/apiFeatures')
 
 const axios = require("axios");
 const API_URL = "http://api.positionstack.com/v1/forward";
@@ -61,7 +62,6 @@ exports.getCityListings = catchAsyncErrors(async (req, res, next) => {
 exports.updateListing = catchAsyncErrors(async (req, res, next) => {
   const { address, city } = req.body;
   const FULL_API_URL = `${API_URL}?access_key=${API_KEY}&query==${address}`;
-
   try {
     const resp = await axios.get(FULL_API_URL);
     const { data } = resp.data;
@@ -98,3 +98,17 @@ exports.updateListing = catchAsyncErrors(async (req, res, next) => {
     success: true,
   });
 });
+
+
+
+exports.filteredSearch = catchAsyncErrors(async (req, res, next) => {
+  const apiFeatures = new APIFeatures(Listing.find(), req.query).search().filter()
+  let listings = await apiFeatures.query
+
+  
+  res.status(200).json({
+    success: true,
+    listings
+  })
+
+})

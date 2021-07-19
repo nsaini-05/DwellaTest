@@ -3,16 +3,19 @@ const mongoose = require("mongoose");
 const listingSchema = new mongoose.Schema({
   title: {
     type: "string",
-    required: [true, "Please enter listing title"]
+    required: [true, "Please enter listing title"],
+    lowercase: true
   },
   address: {
       type: String,
       required: true,
+      lowercase: true
     },
   
   city: {
     type: String,
     required: true,
+    lowercase: true
   },
   price: {
     type: Number,
@@ -23,6 +26,7 @@ const listingSchema = new mongoose.Schema({
   owner: {
     type: String,
     required: true,
+    lowercase: true
   },
 
   type: {
