@@ -2,6 +2,10 @@ const express = require('express')
 const app = express()
 const ErrorHandler = require('./utils/errorHandler');
 var cookieParser  = require('cookie-parser');
+
+const dotenv = require('dotenv')
+dotenv.config({path:'../DWELLATEST/backend/config/config.env'})
+
 app.use(cookieParser());
 //For getting data
 app.use(express.json());

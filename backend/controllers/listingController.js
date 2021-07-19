@@ -4,7 +4,7 @@ const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 
 const axios = require("axios");
 const API_URL = "http://api.positionstack.com/v1/forward";
-const API_KEY = "7f105532f75a759567c0a782116094a8";
+const API_KEY = process.env.KEY;
 
 exports.registerListing = catchAsyncErrors(async (req, res, next) => {
   const { address, city } = req.body;
@@ -26,5 +26,18 @@ exports.registerListing = catchAsyncErrors(async (req, res, next) => {
   res.status(201).json({
     success: true,
     listing,
+  });
+});
+
+exports.deleteListing = catchAsyncErrors(async (req, res, next) => {
+    console.log("Dfaf")
+  const listing = await Listing.findById({ _id: req.params.id });
+  if (!listing) {
+    return next(new ErrorHandler("No Such listing", 404));
+  }
+
+  await listing.remove();
+  res.status(200).json({
+    success: true,
   });
 });
