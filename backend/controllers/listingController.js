@@ -30,7 +30,6 @@ exports.registerListing = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.deleteListing = catchAsyncErrors(async (req, res, next) => {
-    console.log("Dfaf")
   const listing = await Listing.findById({ _id: req.params.id });
   if (!listing) {
     return next(new ErrorHandler("No Such listing", 404));
@@ -41,3 +40,13 @@ exports.deleteListing = catchAsyncErrors(async (req, res, next) => {
     success: true,
   });
 });
+
+
+
+exports.allListing = catchAsyncErrors(async (req, res, next)=>{
+ const listings = await Listing.find();
+ res.status(200).json({
+    listings
+  });
+
+})

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {registerListing,deleteListing}  = require('../controllers/listingController')
+const {registerListing,deleteListing, allListing}  = require('../controllers/listingController')
 
 
 
@@ -10,6 +10,7 @@ const {registerListing,deleteListing}  = require('../controllers/listingControll
 
 router.route('/create').post(registerListing);
 router.route('/delete/:id').delete(deleteListing);
+router.route('/all').get(allListing);
 
 
 module.exports = router
