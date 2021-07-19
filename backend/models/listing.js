@@ -44,10 +44,10 @@ const listingSchema = new mongoose.Schema({
   longitude: {
     type: String,
   },
-  
-  inMarket :{
-    type : Boolean,
-    default : false,
+
+  inMarket: {
+    type: Boolean,
+    default: false,
   },
 });
 

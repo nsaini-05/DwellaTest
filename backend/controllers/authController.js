@@ -3,10 +3,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 
-
-
-
-
+//localhost:3000/signup
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.create(req.body);
   res.status(201).json({
@@ -15,6 +12,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//localhost:3000/login
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -37,6 +35,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
+//localhost:3000/update/password
 exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
 
@@ -52,6 +51,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
+//localhost:3000/update/profile
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newuserData = {
     userName: req.body.userName,
@@ -71,6 +71,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//localhost:3000/delete/username
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({ userName: req.params.userName });
 
@@ -85,6 +86,7 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//localhost:3000/users
 exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
   const Users = await User.find();
   res.status(200).json({
@@ -92,6 +94,7 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//localhost:3000/find
 exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
   const { userName } = req.body;
   const user = await User.findOne({ userName: userName });
@@ -101,6 +104,6 @@ exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   res.status(200).json({
-    user
+    user,
   });
 });
